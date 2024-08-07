@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    <title>Data from SQL Server</title>
+</head>
+<body>
+    <h1>Data from SQL Server</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <!-- Cambia estos encabezados según tu estructura de datos -->
+                <th>ID</th>
+                <th>Name</th>
+                <th>Otro</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <!-- Cambia estos campos según tu estructura de datos -->
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2]}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
