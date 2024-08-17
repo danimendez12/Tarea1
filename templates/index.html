@@ -1,29 +1,139 @@
 <!doctype html>
 <html>
 <head>
-    <title>Data from SQL Server</title>
+    <title>Datos de trabajadores</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #bb1515;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #458339;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-content input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Data from SQL Server</h1>
-    <table border="1">
+    <h1>Datos de trabajadores</h1>
+
+    {% if mensaje %}
+    <div style="color: green; font-weight: bold; margin-bottom: 20px;">
+        {{ mensaje }}
+    </div>
+    {% endif %}
+
+    <table>
         <thead>
             <tr>
-                <!-- Cambia estos encabezados según tu estructura de datos -->
                 <th>ID</th>
-                <th>Name</th>
-                <th>Otro</th>
+                <th>Nombre</th>
+                <th>Salario</th>
             </tr>
         </thead>
         <tbody>
             {% for row in data %}
             <tr>
-                <!-- Cambia estos campos según tu estructura de datos -->
                 <td>{{ row[0] }}</td>
                 <td>{{ row[1] }}</td>
-                <td>{{ row[2]}}</td>
+                <td>{{ row[2] }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="button-container">
+        <button onclick="openModal()">Agregar</button>
+        <button onclick="location.href='buscar.html'">Buscar</button>
+    </div>
+
+    <!-- Modal para agregar un nuevo trabajador -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <h2>Agregar Trabajador</h2>
+            <form method="POST" action="/insert">
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <input type="number" name="salario" placeholder="Salario" step="0.01" required>
+                <button type="submit">Confirmar</button>
+            </form>
+            <button onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        // Función para abrir el modal
+        function openModal() {
+            document.getElementById("myModal").style.display = "flex";
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+    </script>
 </body>
 </html>
