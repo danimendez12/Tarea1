@@ -7,17 +7,15 @@ app = Flask(__name__)
 # Configura la conexión a SQL Server
 def get_db_connection():
     conn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};'
+        'DRIVER={ODBC Driver 18 for SQL Server};'
         'SERVER=mssql-180519-0.cloudclusters.net,10034;'
         'DATABASE=TareaUno;'
         'UID=Admin;'
         'PWD=Db12345678;'
         'Encrypt=no;'  # Deshabilitar SSL solo para pruebas
+        'TrustServerCertificate=yes;'  # Confía en el certificado del servidor
     )
     return conn
-
-def tarea():
-    return
 
 @app.route('/')
 def index():
