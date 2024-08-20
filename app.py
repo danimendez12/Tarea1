@@ -16,7 +16,7 @@ def get_db_connection():
     )
     return conn
 
-def prueba():
+def tarea():
     return
 
 @app.route('/')
