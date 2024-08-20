@@ -16,6 +16,8 @@ def get_db_connection():
     )
     return conn
 
+def prueba():
+    return
 
 @app.route('/')
 def index():
