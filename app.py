@@ -90,9 +90,87 @@ def search():
         else:
             message = f"Error inesperado: {ex}"
     finally:
-
         cursor.close()
         conn.close()
+
+    return render_template('result-search.html', data=data, mensaje=message)
+
+# Ruta para eliminar un nuevo empleado
+@app.route('/delete', methods=['POST'])
+def delete():
+    nombre = request.form['nombre']
+
+    try:
+        # ----- ELIMINA FILA -----
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC dbo.sp_DeleteEmpleado ?", nombre)
+        conn.commit()
+        message = "Empleado eliminado correctamente."
+
+    except pyodbc.Error as ex:
+        # ----- EXCEPCIONES -----
+        sqlstate = ex.args[0]
+        if sqlstate == '50001':
+            message = "Error: El empleado ya existe en la base de datos."
+        elif sqlstate == '50003':
+            message = "Error: El nombre no puede ser NULL, vacío, y debe contener solo letras y guiones."
+        else:
+            message = f"Error inesperado: {ex}"
+    finally:
+        cursor.close()
+        conn.close()
+
+    try:
+        # ----- LLAMADA A TABLA -----
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC sp_GetEmpleadosOrdenados")
+        data = cursor.fetchall()
+        conn.close()
+    except Exception as e:
+        return f"Ocurrió un error: {e}"
+
+    return render_template('index.html', data=data, mensaje=message)
+
+# Ruta para insertar un nuevo empleado
+@app.route('/modify', methods=['POST'])
+def modify():
+    nombre = request.form['nombre']
+    salario = request.form['salario']
+
+    try:
+        # ----- MODICICACIÓN -----
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC dbo.sp_ModifyEmpleado ?, ?", (nombre, salario))
+        conn.commit()
+        message = "Empleado actualizado."
+
+    except pyodbc.Error as ex:
+        # ----- EXCEPCIONES -----
+        sqlstate = ex.args[0]
+        if sqlstate == '50001':
+            message = "Error: El empleado no existe en la base de datos."
+        elif sqlstate == '50002':
+            message = "Error: El salario no puede ser NULL y debe ser un valor positivo."
+        elif sqlstate == '50003':
+            message = "Error: El nombre no puede ser NULL, vacío, y debe contener solo letras y guiones."
+        else:
+            message = f"Error inesperado: {ex}"
+    finally:
+        cursor.close()
+        conn.close()
+
+    try:
+        # ----- LLAMADA A TABLA -----
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC sp_GetEmpleadosOrdenados")
+        data = cursor.fetchall()
+        conn.close()
+    except Exception as e:
+        return f"Ocurrió un error: {e}"
 
     return render_template('index.html', data=data, mensaje=message)
 

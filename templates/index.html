@@ -107,12 +107,14 @@
     </table>
 
     <div class="button-container">
-        <button onclick="openModal('myModal')">Agregar</button>
+        <button onclick="openModal('addModal')">Agregar</button>
         <button onclick="openModal('searchModal')">Buscar</button>
+        <button onclick="openModal('deleteModal')">Eliminar</button>
+        <button onclick="openModal('modifyModal')">Modificar</button>
     </div>
 
     <!-- Modal para agregar un nuevo trabajador -->
-    <div id="myModal" class="modal">
+    <div id=addModal" class="modal">
         <div class="modal-content">
             <h2>Agregar Trabajador</h2>
             <form method="POST" action="/insert">
@@ -133,6 +135,31 @@
                 <button type="submit">Buscar</button>
             </form>
             <button onclick="closeModal('searchModal')">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal para eliminar un trabajador -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2>Eliminar Trabajador</h2>
+            <form method="POST" action="/delete">
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <button type="submit">Eliminar</button>
+            </form>
+            <button onclick="closeModal('deleteModal')">Cerrar</button>
+        </div>
+    </div>
+
+        <!-- Modal para modificar un trabajador -->
+    <div id="modifyModal" class="modal">
+        <div class="modal-content">
+            <h2>Modificar Trabajador</h2>
+            <form method="POST" action="/modify">
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <input type="number" name="salario" placeholder="Salario Actualizado" step="0.01" required>
+                <button type="submit">Confirmar</button>
+            </form>
+            <button onclick="closeModal('modifyModal')">Cerrar</button>
         </div>
     </div>
 
