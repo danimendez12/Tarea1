@@ -69,5 +69,32 @@ def insert():
 
     return render_template('index.html', data=data, mensaje=message)
 
+# Ruta para buscar un empleado en la base de datos
+@app.route('/search', methods=['POST'])
+def search():
+    # Obtención de datos solicitados del html
+    nombre = request.form['nombre']
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC dbo.sp_SearchEmpleado ?", (nombre))
+        data = cursor.fetchall()
+        message = "Empleado encontrado."
+
+    except pyodbc.Error as ex:
+        sqlstate = ex.args[0]
+        if sqlstate == '50001':
+            message = "Error: El empleado no existe en la base de datos."
+        elif sqlstate == '50003':
+            message = "Error: El nombre no puede ser NULL, vacío, y debe contener solo letras y guiones."
+        else:
+            message = f"Error inesperado: {ex}"
+    finally:
+
+        cursor.close()
+        conn.close()
+
+    return render_template('index.html', data=data, mensaje=message)
+
 if __name__ == '__main__':
     app.run(debug=True)

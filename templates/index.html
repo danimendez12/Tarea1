@@ -107,8 +107,8 @@
     </table>
 
     <div class="button-container">
-        <button onclick="openModal()">Agregar</button>
-        <button onclick="location.href='buscar.html'">Buscar</button>
+        <button onclick="openModal('myModal')">Agregar</button>
+        <button onclick="openModal('searchModal')">Buscar</button>
     </div>
 
     <!-- Modal para agregar un nuevo trabajador -->
@@ -124,15 +124,27 @@
         </div>
     </div>
 
+     <!-- Modal para buscar un trabajador -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <h2>Buscar Trabajador</h2>
+            <form method="POST" action="/search">
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <button type="submit">Buscar</button>
+            </form>
+            <button onclick="closeModal('searchModal')">Cerrar</button>
+        </div>
+    </div>
+
     <script>
-        // Función para abrir el modal
-        function openModal() {
-            document.getElementById("myModal").style.display = "flex";
+        // Función para abrir "modal
+        function openModal(Modal) {
+            document.getElementById(Modal).style.display = "flex";
         }
 
-        // Función para cerrar el modal
-        function closeModal() {
-            document.getElementById("myModal").style.display = "none";
+        // Función para cerrar "modal"
+        function closeModal(Modal) {
+            document.getElementById(Modal).style.display = "none";
         }
     </script>
 </body>
