@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Configura la conexión a SQL Server
 def get_db_connection():
     conn = pyodbc.connect(
-        'DRIVER={ODBC Driver 18 for SQL Server};'
+        'DRIVER={ODBC Driver 17 for SQL Server};'
         'SERVER=mssql-180519-0.cloudclusters.net,10034;'
         'DATABASE=TareaUno;'
         'UID=Admin;'
@@ -72,14 +72,20 @@ def insert():
 # Ruta para buscar un empleado en la base de datos
 @app.route('/search', methods=['POST'])
 def search():
-    # Obtención de datos solicitados del html
     nombre = request.form['nombre']
+    data = []  # Inicializar 'data' para evitar errores si ocurre una excepción antes de su asignación
+    message = "Empleado no encontrado."
+
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("EXEC dbo.sp_SearchEmpleado ?", (nombre))
+        cursor.execute("EXEC dbo.sp_SearchEmpleado ?", (nombre,))
         data = cursor.fetchall()
-        message = "Empleado encontrado."
+
+        if not data:
+            message = "Error: El empleado no existe en la base de datos."
+        else:
+            message = "Empleado encontrado."
 
     except pyodbc.Error as ex:
         sqlstate = ex.args[0]
@@ -94,6 +100,7 @@ def search():
         conn.close()
 
     return render_template('result-search.html', data=data, mensaje=message)
+
 
 # Ruta para eliminar un nuevo empleado
 @app.route('/delete', methods=['POST'])
